@@ -18,24 +18,26 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public Employee create(EmployeeCreateRequest req) {
-        Employee emp = new Employee();
-        emp.setName(req.getName());
-        emp.setImage(req.getImage());
-        emp.setGender(req.getGender());
-        // hireDateは文字列(yyyy-MM-dd) → LocalDateへ変換
-        emp.setHireDate(LocalDate.parse(req.getHireDate()));
-        emp.setMailAddress(req.getMailAddress());
-        emp.setZipCode(req.getZipCode());
-        emp.setAddress(req.getAddress());
-        emp.setTelephone(req.getTelephone());
-        emp.setSalary(req.getSalary());
-        emp.setCharacteristics(req.getCharacteristics());
-        emp.setDependentsCount(req.getDependentsCount());
+    public Employee create(EmployeeCreateRequest request) {
+        try {
+            Employee employee = new Employee();
+            employee.setName(request.getName());
+            employee.setImage(request.getImage());
+            employee.setGender(request.getGender());
+            employee.setHireDate(LocalDate.parse(request.getHireDate()));
+            employee.setMailAddress(request.getMailAddress());
+            employee.setZipCode(request.getZipCode());
+            employee.setAddress(request.getAddress());
+            employee.setTelephone(request.getTelephone());
+            employee.setSalary(request.getSalary());
+            employee.setCharacteristics(request.getCharacteristics());
+            employee.setDependentsCount(request.getDependentsCount());
 
-        return employeeRepository.save(emp);
+            return employeeRepository.save(employee);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to create employee: " + ex.getMessage());
+        }
     }
-
     // public List<Employee> findAll() {
     // return employeeRepository.findAll();
     // }

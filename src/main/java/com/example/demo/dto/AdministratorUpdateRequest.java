@@ -1,8 +1,17 @@
 package com.example.demo.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class AdministratorUpdateRequest {
+    @NotBlank
     private String name;
+
+    @NotBlank
+    @Email
     private String mailAddress;
+
+    @NotBlank
     private String password;
 
     public String getName() {

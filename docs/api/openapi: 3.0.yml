@@ -24,30 +24,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Administrator"
-        "400":
-          description: 不正なクエリパラメータなどで取得できない場合
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              examples:
-                badRequest:
-                  summary: "400エラー"
-                  value:
-                    status: 400
-                    message: "Bad Request"
-        "404":
-          description: 管理者が1人も見つからないなどのケース
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              examples:
-                notFound:
-                  summary: "404エラー"
-                  value:
-                    status: 404
-                    message: "Not Found"
         "500":
           description: サーバ内部エラー
           content:
@@ -246,7 +222,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Employee"
         "400":
-          description: リクエスト不正 (必須項目欠落など)
+          description: リクエスト不正 (必須項目が欠落など)
           content:
             application/json:
               schema:
@@ -282,30 +258,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Employee"
-        "400":
-          description: 不正なクエリパラメータなどで取得できない場合
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              examples:
-                badRequest:
-                  summary: "400エラー"
-                  value:
-                    status: 400
-                    message: "Bad Request"
-        "404":
-          description: 従業員が見つからないなどのケース
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              examples:
-                notFound:
-                  summary: "404エラー"
-                  value:
-                    status: 404
-                    message: "Not Found"
         "500":
           description: サーバ内部エラー
           content:
@@ -615,9 +567,16 @@ components:
           example: 1
       required:
         - name
+        - image
         - gender
         - hireDate
         - mailAddress
+        - zipCode
+        - address
+        - telephone
+        - salary
+        - characteristics
+        - dependentsCount
 
     EmployeeUpdateRequest:
       type: object
@@ -668,6 +627,18 @@ components:
           type: integer
           description: "扶養人数"
           example: 2
+      required:
+        - name
+        - image
+        - gender
+        - hireDate
+        - mailAddress
+        - zipCode
+        - address
+        - telephone
+        - salary
+        - characteristics
+        - dependentsCount
 
     ErrorResponse:
       type: object
@@ -680,7 +651,6 @@ components:
           type: string
           description: "エラー内容を示すメッセージ"
           example: "Bad Request"
-      # 単一のexampleだけを置く(オプション)
       example:
         status: 400
         message: "Bad Request"

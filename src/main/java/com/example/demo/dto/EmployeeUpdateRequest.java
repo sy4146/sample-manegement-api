@@ -1,16 +1,47 @@
 package com.example.demo.dto;
 
+import jakarta.validation.constraints.*;
+
 public class EmployeeUpdateRequest {
+    @NotBlank
     private String name;
+
+    @NotBlank(message = "Image URL is required")
+    @Pattern(regexp = ".*\\.png$", message = "Image URL must end with .png")
     private String image;
+
+    @NotBlank
+    @Pattern(regexp = "男性|女性", message = "Gender must be '男性' or '女性'")
     private String gender;
+
+    @NotBlank
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Hire date must be in format yyyy-MM-dd")
     private String hireDate;
+
+    @NotBlank
+    @Email(message = "Invalid email format")
     private String mailAddress;
+
+    @NotBlank
+    @Pattern(regexp = "^\\d{3}-\\d{4}$", message = "Zip code must be in format 123-4567")
     private String zipCode;
+
+    @NotBlank
     private String address;
+
+    @NotBlank
+    @Pattern(regexp = "^\\d{2,4}-\\d{2,4}-\\d{4}$", message = "Telephone must be in format 03-9876-5432")
     private String telephone;
+
+    @NotNull
+    @Min(value = 0, message = "Salary must be a positive number")
     private Integer salary;
+
+    @NotBlank
     private String characteristics;
+    
+    @NotNull
+    @Min(value = 0, message = "Dependents count must be a non-negative number")
     private Integer dependentsCount;
 
     public String getName() {
