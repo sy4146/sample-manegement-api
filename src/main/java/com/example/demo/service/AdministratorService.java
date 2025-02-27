@@ -21,6 +21,9 @@ public class AdministratorService {
     }
 
     public Administrator findById(Integer id) {
+        if (id < 0) {
+            throw new IllegalArgumentException("ID must be a positive integer: " + id);
+        }
         return administratorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Administrator not found: " + id));
     }

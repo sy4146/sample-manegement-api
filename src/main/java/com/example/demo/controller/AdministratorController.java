@@ -10,9 +10,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/administrators")
@@ -44,18 +48,43 @@ public class AdministratorController {
      * 成功時は201 Createdを返す
      */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Administrator createAdministrator(
-            @Valid @RequestBody AdministratorCreateRequest request) {
-        return administratorService.create(request);
+    public ResponseEntity<?> createAdministrator(
+            @Valid @RequestBody AdministratorCreateRequest request,
+            BindingResult bindingResult) {
+
+        // バリデーションエラーがある場合、400 Bad Request を返す
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
+        // 正常処理
+        Administrator administrator = administratorService.create(request);
+        return new ResponseEntity<>(administrator, HttpStatus.CREATED);
     }
 
     /**
      * 管理者更新 (PUT /administrators/{administratorId})
      */
     @PutMapping("/{administratorId}")
-    public ResponseEntity<Administrator> updateAdministrator(@PathVariable Integer administratorId,
-            @Valid @RequestBody AdministratorUpdateRequest request) {
+    public ResponseEntity<?> updateAdministrator(
+            @PathVariable Integer administratorId,
+            @Valid @RequestBody AdministratorUpdateRequest request,
+            BindingResult bindingResult) {
+
+        // バリデーションエラーがある場合、400 Bad Request を返す
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
+        // 正常処理
         Administrator updated = administratorService.update(administratorId, request);
         return ResponseEntity.ok(updated);
     }

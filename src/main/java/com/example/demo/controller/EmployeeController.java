@@ -10,9 +10,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employees")
@@ -26,9 +30,22 @@ public class EmployeeController {
      * 成功時は201 Createdを返す
      */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Employee createEmployee(@Valid @RequestBody EmployeeCreateRequest request) {
-        return employeeService.create(request);
+    public ResponseEntity<?> createEmployee(
+            @Valid @RequestBody EmployeeCreateRequest request,
+            BindingResult bindingResult) {
+
+        // バリデーションエラーがある場合、400 Bad Request を返す
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
+        // 正常時の処理
+        Employee createdEmployee = employeeService.create(request);
+        return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
     }
     // // 従業員一覧取得 (GET /employees) (任意)
     // @GetMapping
